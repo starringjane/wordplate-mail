@@ -1,0 +1,22 @@
+{
+    "name": "starring-jane/wordplate-mail",
+    "description": "Adds mail settings to your environment configuration",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Vanhove",
+            "email": "maxim@starringjane.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "StarringJane\\WordplateMail\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "wordplate/framework": "*"
+    }
+}
