@@ -16,7 +16,6 @@
         }
     },
     "require": {
-        "php": ">=7.2",
-        "wordplate/framework": "*"
+        "php": ">=7.2"
     }
 }
