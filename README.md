@@ -46,6 +46,21 @@ MAIL_FROM_NAME="Sender Name"
 MAIL_FROM_ADDRESS="no-reply@domain.com"
 ```
 
+## Override variables in code
+
+Sometimes you might want to set variables dynamicaly
+
+```php
+use StarringJane\WordplateMail\WordplateMail;
+
+WordplateMail::register()
+    ->set('MAIL_FROM_NAME', 'Starring Jane')
+    ->set('MAIL_FROM_ADDRESS', function () {
+        $domain = str_replace('www.', '', $_SERVER['SERVER_NAME']);
+        return 'no-reply@' . $domain;
+    });
+```
+
 ## Contributors
 
 * Maxim Vanhove (maxim@starringjane.com) [![Twitter Follow](https://img.shields.io/twitter/follow/MrMaximVanhove.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/MrMaximVanhove)

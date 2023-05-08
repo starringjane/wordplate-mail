@@ -4,6 +4,8 @@ namespace StarringJane\WordplateMail;
 
 class WordplateMail
 {
+    public $variables = [];
+
     public function __construct()
     {
         $this->hooks();
@@ -12,6 +14,24 @@ class WordplateMail
     public static function register()
     {
         return new self();
+    }
+
+    public function set($key, $value)
+    {
+        $this->variables[$key] = $value;
+
+        return $this;
+    }
+
+    public function get($key, $default = null)
+    {
+        if (isset($this->variables[$key])) {
+            return is_callable($this->variables[$key])
+                ? $this->variables[$key]()
+                : $this->variables[$key];
+        }
+
+        return $this->get($key, $default);
     }
 
     public function hooks()
@@ -34,7 +54,7 @@ class WordplateMail
 
     public function phpmailer_init($mail)
     {
-        if (env('MAIL_DRIVER', 'smtp') === 'smtp') {
+        if ($this->get('MAIL_DRIVER', 'smtp') === 'smtp') {
             $mail->IsSMTP();
         } else {
             $mail->isMail();
@@ -42,12 +62,12 @@ class WordplateMail
 
         $mail->SMTPAutoTLS = false;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');
+        $mail->SMTPSecure = $this->get('MAIL_ENCRYPTION', 'tls');
     
-        $mail->Host = env('MAIL_HOST', 'localhost');
-        $mail->Port = env('MAIL_PORT', 25);
-        $mail->Username = env('MAIL_USERNAME');
-        $mail->Password = env('MAIL_PASSWORD');
+        $mail->Host = $this->get('MAIL_HOST', 'localhost');
+        $mail->Port = $this->get('MAIL_PORT', 25);
+        $mail->Username = $this->get('MAIL_USERNAME');
+        $mail->Password = $this->get('MAIL_PASSWORD');
     
         /**
          * Set sender to the same as from address
@@ -59,8 +79,8 @@ class WordplateMail
 
     public function wp_mail_from($from_email)
     {
-        if (env('MAIL_FROM_ADDRESS')) {
-            return env('MAIL_FROM_ADDRESS');
+        if ($this->get('MAIL_FROM_ADDRESS')) {
+            return $this->get('MAIL_FROM_ADDRESS');
         }
 
         return $from_email;
@@ -68,8 +88,8 @@ class WordplateMail
 
     public function wp_mail_from_name()
     {
-        if (env('MAIL_FROM_NAME')) {
-            return env('MAIL_FROM_NAME');
+        if ($this->get('MAIL_FROM_NAME')) {
+            return $this->get('MAIL_FROM_NAME');
         }
 
         return get_bloginfo('name');
