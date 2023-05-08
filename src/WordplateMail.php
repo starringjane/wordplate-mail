@@ -31,7 +31,7 @@ class WordplateMail
                 : $this->variables[$key];
         }
 
-        return $this->get($key, $default);
+        return env($key, $default);
     }
 
     public function hooks()
